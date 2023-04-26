@@ -1,0 +1,12 @@
+/node_modules
+.history
+/packages/core/dist/
+/packages/core/node_modules/*
+.vitest-preview
+docs/.vitepress/cache
+
+**/node_modules
+.snap
+**/dist
+
+.yalc

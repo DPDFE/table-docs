@@ -1,0 +1,1 @@
+import{_ as t,c as e,o as a,V as o}from"./chunks/framework.2f925b08.js";const f=JSON.parse('{"title":"什么是高性能表格？","description":"","frontmatter":{},"headers":[],"relativePath":"index.md","lastUpdated":1682494522000}'),r={name:"index.md"},n=o("",8),s=[n];function _(d,p,c,i,l,h){return a(),e("div",null,s)}const m=t(r,[["render",_]]);export{f as __pageData,m as default};

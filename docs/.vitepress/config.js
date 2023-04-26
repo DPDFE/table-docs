@@ -56,5 +56,5 @@ export default defineConfig({
     docFooter: { prev: "上一篇", next: "下一篇" },
     lastUpdatedText: "最近更新时间",
   },
-  outDir: "../dist",
+  outDir: "./dist",
 });

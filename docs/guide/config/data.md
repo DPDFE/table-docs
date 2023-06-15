@@ -32,21 +32,23 @@ export interface OriginalData {
 			row: TotalConfig;
 			column: TotalConfig;
 			/** 分指标的聚合方式 */
-			aggregation?: Aggregation[];
+			aggregation?: Record<string, Aggregation>;
 		};
 		/** 指标显示在行 */
 		value_in_row?: boolean;
 		/** 自定义单元格内容 */
 		customValue?: (
-			field: string,
+			field: OriginalDataMeta,
 			value: OriginalDataMeta
 		) => OriginalDataMeta;
 		/** 空值展示 */
-		customNullValue?: (field: string) => OriginalDataMeta;
+		customNullValue?: (
+			type: HeaderType,
+			value: OriginalDataMeta
+		) => OriginalDataMeta;
 	};
 	/** 元数据别名映射 */
-	meta?: Record<string, OriginalDataMeta>[];
-	sort_params?: [];
+	meta?: OriginalDataItem[];
 	filter_params?: [];
 }
 ```
@@ -55,7 +57,7 @@ export interface OriginalData {
 
 | <div style="width:100px">字段</div> | <div style="width:200px">含义</div> | <div style="width:200px">类型</div>  |
 | :-----| ----: | ----: |
-| `sub_total_fields` | 小计列 | string[] |
+| `sub_total_fields` | 小计列 | object[] |
 | `show_sub_total` | 显示小计 | boolean |
 | `sub_total_first` | 显示小计在前 | boolean |
 | `show_grand_total` | 显示合计 | boolean |
@@ -63,17 +65,37 @@ export interface OriginalData {
 
 
 ```ts
+/** 聚合方式 */
+export enum Aggregation {
+	SUM = 'SUM',
+	AVG = 'AVG',
+	MAX = 'MAX',
+	MIN = 'MIN'
+}
+
 /** 合计或小计配置 */
 export interface TotalConfig {
-	/** 需要做聚合的维度 */
-	sub_total_fields?: string[];
+	/**
+	 * 需要做聚合的维度
+	 * field - 维度名
+	 * alias - 别名
+	 * customName - 自定义名字
+	 */
+	sub_total_fields?: {
+		field: string;
+		alias?: string;
+		customName?: (node: BodyData) => string;
+	}[];
 	/** 显示小计 */
 	show_sub_total?: boolean;
 	/** 小计在前 */
 	sub_total_first?: boolean;
+
 	/** 显示合计 */
 	show_grand_total?: boolean;
 	/** 合计在前 */
 	grand_total_first?: boolean;
+	/** 合计名 */
+	grand_total_name?: string;
 }
 ```

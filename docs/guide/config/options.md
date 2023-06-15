@@ -10,6 +10,7 @@
 
 
 ```ts
+/** 用户输入的option */
 export interface OriginalOption {
 	/** 自动撑满 */
 	stretch?: boolean;
@@ -19,21 +20,19 @@ export interface OriginalOption {
 	fix_header?: boolean;
 	/** 是否开启序号 */
 	enable_row_number?: boolean;
+	/** 开启聚合序号模式 */
+	use_simple_row_number_mode?: boolean;
+	/** 尾部冻结数量 */
+	frozen_bottom_row_count?: number;
 	/** 列宽 */
-	col_widths: number[];
-
-	/** 对齐方式 */
-	aligns_settings: {
-		row: AlignType;
-		column: AlignType;
-		table_body: AlignType;
-	};
+	col_widths?: number[];
 
 	/** 通用样式设置 */
 	table_style?: {
 		common?: {
 			border_type: BorderType;
 			border_color: string;
+			border_width: number;
 		};
 		/** table行header的样式 */
 		row_header?: TableHeaderStyle;
@@ -43,14 +42,45 @@ export interface OriginalOption {
 		table_body?: TableBodyStyle;
 	};
 
+	/** 自定义模块渲染 */
 	customRenderers?: {
-		corner?: CustomRenderer;
+		[key in HeaderType]?: CustomRenderer;
 	};
 
 	/** 事件 */
 	event?: Partial<TableEvent>;
 
 	/** 条件格式 */
-	conditions?: Record<string, TableCondition>;
+	conditions?: Condition;
+
+	/** 分页器配置 */
+	pagination?: PaginationConfig;
+
+	/** 排序 */
+	sort?: {
+		/** 排序规则 */
+		sort_params?: SorterParamsConfig[];
+		/** 是否开启前端排序计算 */
+		use_sort_algorithm?: SorterAlgorithmType;
+	};
+
+	/** 支持精简表头模式 */
+	use_simple_header_mode?: boolean;
+}
+
+
+/** 排序规则 */
+export enum SorterType {
+	Default = 'default', // 默认、自定义
+	Asc = 'asc', // 升序
+	Desc = 'desc' // 降序
+}
+
+/** 排序生效模式 */
+export enum SorterAlgorithmType {
+	/** 排序分组生效 */
+	Group = 'group',
+	/** 单列分组生效 */
+	Single = 'single'
 }
 ```

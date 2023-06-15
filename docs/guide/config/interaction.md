@@ -21,7 +21,7 @@ export interface TableEvent {
 	onClick?: (
 		e: MouseEvent,
 		target: HTMLElement,
-		data: Record<string, OriginalDataMeta>
+		data: OriginalDataItem
 	) => void;
 	/** column resize事件 */
 	onColResize?: (
@@ -30,5 +30,9 @@ export interface TableEvent {
 		width: number,
 		widths?: number[]
 	) => void;
+	/** 修改排序 */
+	onSorterChange?: (results: SorterParamsConfig[]) => void;
+	/** 渲染完成 */
+	onRendered?: () => void;
 }
 ```

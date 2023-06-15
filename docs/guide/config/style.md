@@ -20,11 +20,12 @@ export type AlignType = 'left' | 'center' | 'right';
 
 export type BorderType = 'all' | 'row' | 'col' | 'outer';
 
+/** table header的样式 */
 export interface TableHeaderStyle {
 	background: string;
 	text_style: TextStyle;
+	align: AlignType;
 }
-
 /** table body的样式 */
 export interface TableBodyStyle {
 	/** 奇数行背景色 */
@@ -32,67 +33,85 @@ export interface TableBodyStyle {
 	/** 偶数行背景色 */
 	even_background: string;
 	text_style: TextStyle;
+	/** 对齐方式 */
+	align: AlignType;
+}
+
+export declare enum HeaderType {
+	Row = 'Row',
+	Col = 'Col',
+	Corner = 'Corner',
+	Body = 'Body',
+	BottomRow = 'BottomRow',
+	BottomBody = 'BottomBody'
 }
 
 export interface OriginalOption {
-	/** 对齐方式 */
-	aligns_settings: {
-		row: AlignType;
-		column: AlignType;
-		table_body: AlignType;
-	};
-
 	/** 通用样式设置 */
-	table_style: {
-		common: {
+	table_style?: {
+		common?: {
 			border_type: BorderType;
 			border_color: string;
-			width: number;
-			height: number;
+			border_width: number;
 		};
 		/** table行header的样式 */
-		row_header: TableHeaderStyle;
+		row_header?: TableHeaderStyle;
 		/** table列header的样式 */
-		col_header: TableHeaderStyle;
+		col_header?: TableHeaderStyle;
 		/** table body的样式 */
-		table_body: TableBodyStyle;
+		table_body?: TableBodyStyle;
+	};
+
+	/** 自定义模块渲染 */
+	customRenderers?: {
+		[key in HeaderType]?: CustomRenderer;
 	};
 
 	/** 条件格式 */
-	conditions: Record<string, TableCondition>;
-
-	/** 自定义渲染，目前只支持角表头 */
-	customRenderers?: {
-		corner?: CustomRenderer;
-	};
+	conditions: Condition;
 }
 ```
 
 条件格式：
 
 ```ts
-export interface TableCondition {
-	getConditionConfig: (value: OriginalDataMeta) => {
-		/** 要显示的label */
-		label: OriginalDataMeta;
-		/** 加上额外内容的字符 */
-		custom_string_content: string;
+export declare enum TableConditionType {
+	Icon = 'Icon',
+	ColorScale = 'ColorScale',
+	DataBar = 'DataBar'
+}
+/** 条件格式 */
+export type Condition = Record<
+	string,
+	| Record<TableConditionType.Icon, IconTableCondition>
+	| Record<TableConditionType.ColorScale, ColorScaleTableCondition>
+	| Record<TableConditionType.DataBar, DataBarTableCondition>
+>;
+/** 图标颜色 */
+export interface IconTableCondition {
+	icon_position?: 'left' | 'right';
+	icon_only?: boolean;
+	show_icon?: boolean;
+	getStyle: ({ label, type_key, type_value, data }: BodyData) => {
+		icon_color?: string;
+		icon_name?: string;
 	};
-	/** 额外的内容，提供dom供挂载 */
-	customContentRenderer: (
-		label: OriginalDataMeta,
-		el: HTMLElement
-	) => HTMLElement | string;
 }
-export interface CustomRenderer {
-	/** 加上额外内容的字符 */
-	customStringContent: (value: OriginalDataMeta) => OriginalDataMeta;
-	/** 额外的内容，提供dom供挂载 */
-	customContentRenderer: (
-		label: OriginalDataMeta,
-		el: HTMLElement
-	) => HTMLElement | string;
+/** 色阶 */
+export interface ColorScaleTableCondition {
+	getStyle: ({ label, type_key, type_value, data }: BodyData) => {
+		text_color?: string;
+		background_color?: string;
+	};
 }
-
-export type ConditionType = 'icon' | 'background';
+/** 数据条 */
+export interface DataBarTableCondition {
+	/** TODO: 支持颜色渐变 */
+	positive_color: string;
+	negative_color: string;
+	/** 获取数据条长度占比 */
+	max: number;
+	min: number;
+	mid: number;
+}
 ```

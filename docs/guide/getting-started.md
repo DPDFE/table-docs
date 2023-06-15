@@ -7,39 +7,39 @@
 npm install @dpdfe/table --registry=http://ires.58corp.com/repository/58npm/
 # yarn add @dpdfe/table --registry=http://ires.58corp.com/repository/58npm/
 ```
-`CDN`:
-```js
-	<script src="https://wos2.58cdn.com.cn/MnOjIhGfMnSn/dpd/wtable-0.0.1-umd.min.js"></script>
-```
+
 
 ### 使用
 
 **1.数据准备**
 ```js
 const fixed_mock_data: OriginalData = {
-	fields: {
-		rows: ['province', 'city', 'year'],
-		columns: ['type', 'product'],
-		values: ['income', 'cost'],
-		value_in_row: false,
-		total_config: {
-			row: {
-				sub_total_fields: ['city', 'year'],
-				show_sub_total: true,
-				sub_total_first: true,
-				show_grand_total: true,
-				grand_total_first: true
-			},
-			column: {
-				sub_total_fields: ['product'],
-				show_sub_total: true,
-				sub_total_first: true,
-				show_grand_total: true,
-				grand_total_first: true
-			},
-			aggregation: ['SUM', 'SUM']
-		}
-	},
+	rows: ['province', 'city', 'year'],
+	columns: ['type', 'product'],
+	values: ['income'],
+	value_in_row: false,
+	total_config: {
+		row: {
+			sub_total_fields: [
+				{ field: 'city', name: '小计' },
+				{ field: 'year' }
+			],
+			show_sub_total: true,
+			sub_total_first: true,
+			show_grand_total: true,
+			grand_total_first: true,
+			grand_total_name: '合计'
+		},
+		column: {
+			sub_total_fields: [{ field: 'product', name: '小计' }],
+			show_sub_total: true,
+			sub_total_first: true,
+			show_grand_total: true,
+			grand_total_first: true,
+			grand_total_name: '合计'
+		},
+		aggregation: { cost: Aggregation.SUM, income: Aggregation.SUM }
+	}
 	data: [
 		{
 			type: '调料',
@@ -240,10 +240,17 @@ import { XHTable } from '@dpdfe/table';
 
 const container = document.querySelector<HTMLElement>('#root');
 
-new XHTable(container, {
+const table = new XHTable(container, {
 	data: fixed_mock_data,
 	options: fixed_mock_config
 });
+
+// 支持更新配置
+// table.updateOptions({
+// 	data: fixed_mock_data,
+// 	options: fixed_mock_config
+// });
+
 ```
 
 **4.效果**

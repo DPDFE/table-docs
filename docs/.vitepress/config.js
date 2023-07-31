@@ -47,7 +47,7 @@ export default defineConfig({
               { text: "功能", link: "/guide/config/options" },
               { text: "交互", link: "/guide/config/interaction" },
               { text: "样式", link: "/guide/config/style" },
-              { text: "声明周期", link: "/guide/config/eventloop" },
+              { text: "生命周期", link: "/guide/config/eventloop" },
             ],
           },
         ],

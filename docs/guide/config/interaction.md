@@ -21,17 +21,32 @@ export interface TableEvent {
 	onClick?: (
 		e: MouseEvent,
 		target: HTMLElement,
-		data: OriginalDataItem
+		arr: {
+			key: OriginalDataMeta;
+			value: OriginalDataMeta;
+		}[],
+		data: BaseCell
 	) => void;
 	/** column resize事件 */
 	onColResize?: (
-		start: number,
-		end: number,
-		width: number,
-		widths?: number[]
+		widths: number[],
+		{
+			x1,
+			x2,
+			size,
+			type
+		}: { x1: number; x2: number; size: number; type: HeaderType }
 	) => void;
 	/** 修改排序 */
-	onSorterChange?: (results: SorterParamsConfig[]) => void;
+	onSorterChange?: (
+		results: SorterParamsConfig[],
+		cell: CellProps,
+		sorter: SorterType
+	) => void;
+	/** 修改配置 */
+	onOptionsChange?: (options: OriginalOption) => void;
+	/** 修改数据 */
+	onDataChange?: (data: OriginalData) => void;
 	/** 渲染完成 */
 	onRendered?: () => void;
 }

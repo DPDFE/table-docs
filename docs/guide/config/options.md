@@ -12,18 +12,26 @@
 ```ts
 /** 用户输入的option */
 export interface OriginalOption {
+	/** 最小列宽 */
+	min_col_width?: number;
+	/** 最小列高 */
+	min_row_height?: number;
 	/** 自动撑满 */
 	stretch?: boolean;
 	/** 自动换行 */
 	word_wrap?: boolean;
 	/** 表头是否固定 */
 	fix_header?: boolean;
+	/** 左侧表头固定 */
+	fix_row_header?: boolean;
 	/** 是否开启序号 */
 	enable_row_number?: boolean;
 	/** 开启聚合序号模式 */
 	use_simple_row_number_mode?: boolean;
 	/** 尾部冻结数量 */
 	frozen_bottom_row_count?: number;
+	/** 表格宽度可拖拽 */
+	is_column_width_draggable?: boolean;
 	/** 列宽 */
 	col_widths?: number[];
 
@@ -43,15 +51,16 @@ export interface OriginalOption {
 	};
 
 	/** 自定义模块渲染 */
-	customRenderers?: {
-		[key in HeaderType]?: CustomRenderer;
-	};
+	customRenderers?: CustomRenderer;
 
 	/** 事件 */
 	event?: Partial<TableEvent>;
 
 	/** 条件格式 */
 	conditions?: Condition;
+
+	/** 主题 */
+	theme?: ThemeCfg;
 
 	/** 分页器配置 */
 	pagination?: PaginationConfig;
@@ -82,5 +91,11 @@ export enum SorterAlgorithmType {
 	Group = 'group',
 	/** 单列分组生效 */
 	Single = 'single'
+}
+
+/** 主题配置 */
+export interface ThemeCfg {
+	primary_color?: string;
+	name?: Theme;
 }
 ```

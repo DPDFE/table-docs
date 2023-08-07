@@ -21,10 +21,12 @@ export interface OriginalData {
 	/** (k,v)类型的data */
 	data: OriginalDataItem[];
 	fields: {
-		/** 行维度 */
-		rows?: string[];
-		/** 列维度 */
-		columns: string[];
+		/** 是否使用定位header模式 */
+		is_location_header_mode?: boolean;
+		/** 横轴 */
+		rows?: HeaderDataArray;
+		/** 纵轴 */
+		columns?: HeaderDataArray;
 		/** 指标 */
 		values?: string[];
 		/** 合计与小计配置 */
@@ -65,6 +67,26 @@ export interface OriginalData {
 
 
 ```ts
+
+type HeaderLabel = string;
+interface HeaderLabelNode {
+	label: HeaderLabel;
+	children: HeaderDataArray;
+}
+
+interface HeaderLabelPositionNode {
+	label: HeaderLabel;
+	x1: number;
+	x2: number;
+	y1: number;
+	y2: number;
+	/** 是否是表格的数据key */
+	is_data?: boolean;
+}
+export type HeaderData = HeaderLabel | HeaderLabelNode;
+export type HeaderPosData = HeaderLabelPositionNode;
+export type HeaderDataArray = HeaderData[] | HeaderPosData[];
+
 /** 聚合方式 */
 export enum Aggregation {
 	SUM = 'SUM',
